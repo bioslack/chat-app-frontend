@@ -1,0 +1,58 @@
+.overlay {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: #00000091;
+  z-index: 999999;
+  transition: opacity 200ms;
+
+  &--show {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  &--hidden {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+.profile-dialog {
+  position: relative;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  padding: 25px 15px 15px;
+  width: 400px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 5px 10px #333333;
+
+  &__close {
+    position: absolute;
+    right: 25px;
+    top: 15px;
+    cursor: pointer;
+  }
+
+  &__picture {
+    width: 200px;
+    height: 200px;
+    background-color: #bebebe;
+    border-radius: 50%;
+    margin-bottom: 5px;
+  }
+
+  &__file {
+    display: none;
+  }
+
+  &__link:link,
+  &__link:visited {
+    text-decoration: none;
+    color: #0070AF;
+  }
+}

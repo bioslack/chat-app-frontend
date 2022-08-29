@@ -1,0 +1,38 @@
+.chat-history {
+  height: calc(100vh - 70px);
+  overflow-y: scroll;
+  font-size: 16px;
+
+  &__item {
+    padding: 10px 15px;
+    display: flex;
+    cursor: pointer;
+    transition: background-color 150ms;
+
+    &:not(:last-child) {
+      margin-bottom: 5px;
+    }
+
+    &:hover {
+      background-color: #efefef;
+    }
+  }
+
+  &__item-right {
+    margin-left: 20px;
+    margin-top: 5px;
+  }
+
+  &__item-title {
+    font-weight: bold;
+    color: #272727;
+    margin-bottom: 5px;
+  }
+
+  &__photo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #a8a8a8;
+  }
+}

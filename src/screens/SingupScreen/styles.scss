@@ -1,0 +1,17 @@
+.signup-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  &__form {
+    width: 400px;
+    margin: 0 auto;
+    padding: 30px 40px;
+    border-radius: 25px;
+  }
+
+  &__textinput:nth-last-child(4) {
+    margin-bottom: 12px;
+  }
+}

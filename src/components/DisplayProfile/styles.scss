@@ -1,0 +1,39 @@
+.display-profile {
+  display: flex;
+  padding: 10px 15px;
+  box-shadow: 0 -4px 5px #bebebe;
+
+  &__photo {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    background-color: #ccc;
+  }
+
+  &__title {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  &__status {
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    background-color: #0f0;
+  }
+
+  &__right {
+    flex: 1;
+    margin-left: 20px;
+  }
+
+  &__button {
+    display: inline-block;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
+    // width: 35px;
+    // margin: 5px;
+  }
+}

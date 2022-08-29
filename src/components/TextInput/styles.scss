@@ -1,0 +1,42 @@
+.text-input {
+  position: relative;
+  background-color: #fafafa;
+  width: 100%;
+  padding: 16px;
+  outline: none;
+  border: 1px solid #d8d8d8;
+  border-radius: 9px;
+  font-size: 16px;
+
+  &:disabled::placeholder,
+  &:disabled {
+    color: #afafaf;
+    background-color: #e4e4e4;
+  }
+
+  &::placeholder {
+    color: #858585;
+  }
+
+  &__container {
+    position: relative;
+  }
+
+  &__message {
+    display: inline-block;
+    font-size: 12px;
+    margin-bottom: 5px;
+
+    &--okay {
+      color: #0f0;
+    }
+
+    &--warn {
+      color: #ff0;
+    }
+
+    &--danger {
+      color: #f00;
+    }
+  }
+}

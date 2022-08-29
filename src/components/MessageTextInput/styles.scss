@@ -1,0 +1,49 @@
+.message {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+
+  &::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  &__textinput {
+    background-color: #f6f6f6;
+    width: 100%;
+    padding: 16px;
+    outline: none;
+    border: 1px solid #e8e8e8;
+    border-radius: 100px;
+    font-size: 16px;
+    height: 55px;
+    padding-right: 45px;
+    resize: none;
+    &::-webkit-scrollbar-thumb,
+    &::-webkit-scrollbar-track {
+      display: none;
+    }
+  }
+
+  &__button {
+    position: absolute;
+    background-color: #5db075;
+    text-transform: uppercase;
+    color: #ffffff;
+    right: 1px;
+    padding: 12px;
+    font-weight: bold;
+    border: none;
+    border-radius: 50%;
+    z-index: 999;
+    float: right;
+    margin: 3px;
+  }
+
+  &__icon {
+    color: #ffffff;
+    width: 26px;
+    height: 22px;
+  }
+}
