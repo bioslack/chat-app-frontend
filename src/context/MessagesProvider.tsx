@@ -1,4 +1,10 @@
-import React, { ReactNode, Dispatch, SetStateAction, useEffect } from "react";
+import React, {
+  ReactNode,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useCallback,
+} from "react";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useSocket from "../hooks/useSocket";
@@ -26,11 +32,45 @@ const MessagesProvider = function (props: MessagesProviderProps) {
   const [messages, setMessages] = React.useState<Message[]>([]);
   const [currentChat, setCurrentChat] = React.useState<Chat | undefined>();
   const { decoded, accessToken } = useAuth();
+  const { socket } = useSocket();
   const axios = useAxiosPrivate();
 
-  const sendMessage = (text: string) => {};
+  const sendMessage = useCallback(
+    (text: string) => {
+      if (!currentChat) return;
+      if (!decoded) return;
 
-  useEffect(() => {}, [axios, accessToken]);
+      const message: Message = {
+        _id: uuid(),
+        text,
+        createdAt: Date.now(),
+        receiver: currentChat._id,
+        sender: decoded._id,
+      };
+
+      setMessages((prev) => [...prev, message]);
+      socket.emit("send-message", message);
+    },
+    [decoded, currentChat, socket]
+  );
+
+  useEffect(() => {
+    setMessages([]);
+  }, [currentChat]);
+
+  useEffect(() => {
+    socket.on("receive-message", (message) => {
+      setMessages((prev) => [...prev, message]);
+    });
+
+    return () => {
+      socket.off("receive-message");
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    // axios.get("/chat/mess")
+  }, [axios, accessToken]);
 
   useEffect(() => {
     setCurrentChat(undefined);

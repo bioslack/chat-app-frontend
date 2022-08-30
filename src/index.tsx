@@ -19,11 +19,11 @@ root.render(
   <React.StrictMode>
     <AuthProvider>
       <SocketProvider>
-        <ChatProvider>
-          <MessagesProvider>
+        <MessagesProvider>
+          <ChatProvider>
             <App />
-          </MessagesProvider>
-        </ChatProvider>
+          </ChatProvider>
+        </MessagesProvider>
       </SocketProvider>
     </AuthProvider>
   </React.StrictMode>

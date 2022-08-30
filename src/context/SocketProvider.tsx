@@ -1,6 +1,7 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import io, { Socket } from "socket.io-client";
 import useAuth from "../hooks/useAuth";
+import useMessages from "../hooks/useMessages";
 import Message from "../models/Message";
 
 const socket = io("ws://localhost:8888");
@@ -40,7 +41,6 @@ const SocketProvider = function ({ children }: SocketProviderProps) {
     if (decoded) {
       socket.connect();
       socket.emit("user-connected", decoded._id);
-      console.log("Connected to the backend");
     }
 
     if (!decoded) {
@@ -48,7 +48,7 @@ const SocketProvider = function ({ children }: SocketProviderProps) {
     }
   }, [decoded]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     socket.on("connect", () => {
       setIsConnected(true);
     });
@@ -56,19 +56,13 @@ const SocketProvider = function ({ children }: SocketProviderProps) {
     socket.on("disconnect", () => {
       setIsConnected(false);
     });
-
-    return () => {
-      socket.off("connect");
-      socket.off("disconnect");
-    };
-  }, []);
-
-  useEffect(() => {
     socket.on("users-list", (list) => {
       setConnected(list);
     });
 
     return () => {
+      socket.off("connect");
+      socket.off("disconnect");
       socket.off("users-list");
     };
   }, []);
