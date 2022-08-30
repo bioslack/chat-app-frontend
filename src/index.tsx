@@ -5,7 +5,7 @@ import reportWebVitals from "./reportWebVitals";
 import { disableReactDevTools } from "@fvilers/disable-react-devtools";
 import AuthProvider from "./context/AuthProvider";
 import MessagesProvider from "./context/MessagesProvider";
-// import SocketProvider from "./context/SocketProvider";
+import SocketProvider from "./context/SocketProvider";
 import ChatProvider from "./context/ChatProvider";
 
 if (process.env.NODE_ENV === "production") {
@@ -18,13 +18,13 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <AuthProvider>
-      {/* <SocketProvider> */}
+      <SocketProvider>
         <ChatProvider>
           <MessagesProvider>
             <App />
           </MessagesProvider>
         </ChatProvider>
-      {/* </SocketProvider> */}
+      </SocketProvider>
     </AuthProvider>
   </React.StrictMode>
 );

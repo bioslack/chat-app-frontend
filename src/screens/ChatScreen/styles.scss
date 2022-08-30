@@ -84,6 +84,11 @@
     color: #fff;
   }
 
+  &__status {
+    font-size: 14px;
+    color: #fff;
+  }
+
   &__messages {
     flex: 1;
     overflow-y: scroll;
