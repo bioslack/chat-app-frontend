@@ -48,7 +48,7 @@ const SignupScreen = function () {
     const { error } = schema.validate(prepare(state));
 
     signup(prepare(state)).catch((err) => {
-      setSignupMessage("E-mail / senha inválidos");
+      setSignupMessage("Algo deu errado! Tene novamente mais tarde.");
     });
 
     if (error) return;
