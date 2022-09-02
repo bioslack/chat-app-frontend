@@ -1,14 +1,15 @@
-import React, { FormEvent } from "react";
+import React, { FormEvent, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 import Heading from "../../components/Heading";
 import TextInput from "../../components/TextInput";
 import useAuth from "../../hooks/useAuth";
 import reducer, { FormLoginData } from "./reducer";
-import { MdClose } from "react-icons/md";
 
 import "./styles.scss";
 import schema, { prepare } from "./validator";
+import MessageDialog from "../../components/MessageDialog";
+import Loading from "../../components/Loading";
 
 const formInitialState: FormLoginData = {
   email: {
@@ -28,23 +29,30 @@ const formInitialState: FormLoginData = {
 
 const LoginScreen = function () {
   const [state, dispatch] = React.useReducer(reducer, formInitialState);
-  const { login } = useAuth();
+  const { login, isLoading } = useAuth();
   const [loginMessage, setLoginMessage] = React.useState("");
 
-  const handleSubmit = function (event: FormEvent) {
-    event.preventDefault();
-    dispatch({ type: "VALIDATE" });
+  const handleSubmit = useCallback(
+    function (event: FormEvent) {
+      event.preventDefault();
+      dispatch({ type: "VALIDATE" });
 
-    const { error } = schema.validate(prepare(state));
+      const { error } = schema.validate(prepare(state));
 
-    if (error) return;
+      if (error) return;
 
-    dispatch({ type: "DISABLE" });
-    login(prepare(state)).catch((err) => {
-      setLoginMessage("E-mail / senha inválidos");
-      dispatch({ type: "RESET" });
-    });
-  };
+      dispatch({ type: "DISABLE" });
+      login(prepare(state)).catch((err) => {
+        setLoginMessage("E-mail / senha inválidos");
+        dispatch({ type: "RESET" });
+      });
+    },
+    [state]
+  );
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className="login-screen">
@@ -93,18 +101,11 @@ const LoginScreen = function () {
         </div>
       </form>
       {loginMessage && (
-        <div className="login-dialog__overlay">
-          <div className="login-dialog">
-            <div
-              className="login-dialog__close"
-              onClick={() => setLoginMessage("")}
-            >
-              <MdClose size={25} color="black" />
-            </div>
-            <div className="login-dialog__title">Mensagem</div>
-            <div className="login-dialog__message">{loginMessage}</div>
-          </div>
-        </div>
+        <MessageDialog
+          title="Mensagem"
+          message={loginMessage}
+          onClose={() => setLoginMessage("")}
+        />
       )}
     </div>
   );

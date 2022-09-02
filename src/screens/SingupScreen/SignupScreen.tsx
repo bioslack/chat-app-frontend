@@ -1,4 +1,4 @@
-import React, { FormEvent } from "react";
+import React, { FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
 import Heading from "../../components/Heading";
 import TextInput from "../../components/TextInput";
@@ -7,6 +7,7 @@ import "./styles.scss";
 import reducer, { FormSignupData } from "./reducer";
 import schema, { prepare } from "./validator";
 import useAuth from "../../hooks/useAuth";
+import MessageDialog from "../../components/MessageDialog";
 
 const formInitialState: FormSignupData = {
   name: {
@@ -38,6 +39,7 @@ const formInitialState: FormSignupData = {
 
 const SignupScreen = function () {
   const [state, dispatch] = React.useReducer(reducer, formInitialState);
+  const [signupMessage, setSignupMessage] = useState("");
   const { signup } = useAuth();
 
   const handleSignup = (event: FormEvent) => {
@@ -45,7 +47,9 @@ const SignupScreen = function () {
     dispatch({ type: "VALIDATE" });
     const { error } = schema.validate(prepare(state));
 
-    signup(prepare(state));
+    signup(prepare(state)).catch((err) => {
+      setSignupMessage("E-mail / senha inválidos");
+    });
 
     if (error) return;
   };
@@ -126,6 +130,13 @@ const SignupScreen = function () {
         <span>Já tem cadastro?&nbsp;</span>
         <Link to="/login">Entrar</Link>
       </form>
+      {signupMessage && (
+        <MessageDialog
+          title="Mensagem"
+          message={signupMessage}
+          onClose={() => setSignupMessage("")}
+        />
+      )}
     </div>
   );
 };

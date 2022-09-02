@@ -11,11 +11,9 @@ const Router = function () {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Outlet />}>
-          <Route element={<Loading />}>
-            <Route element={<NoAuth />}>
-              <Route path="login" element={<LoginScreen />} />
-              <Route path="signup" element={<SingupScreen />} />
-            </Route>
+          <Route element={<NoAuth />}>
+            <Route path="login" element={<LoginScreen />} />
+            <Route path="signup" element={<SingupScreen />} />
           </Route>
           <Route element={<RequireAuth />}>
             <Route path="/" element={<ChatScreen2 />} />
