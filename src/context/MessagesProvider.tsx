@@ -55,7 +55,16 @@ const MessagesProvider = function (props: MessagesProviderProps) {
   );
 
   useEffect(() => {
-    setMessages([]);
+    let mounted = true;
+
+    if (!currentChat) return;
+    axios.get(`/chats/messages?_id=${currentChat._id}`).then((res) => {
+      if (mounted) setMessages(res.data.messages);
+    });
+
+    return () => {
+      mounted = false;
+    };
   }, [currentChat]);
 
   useEffect(() => {
