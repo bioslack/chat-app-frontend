@@ -13,6 +13,8 @@ const formatData = (timestamp: number) => {
 const ChatText = function ({ message }: ChatTextProps) {
   const { currentChat } = useMessages();
 
+  if (!currentChat) return <div></div>;
+
   return (
     <div
       className={`chat ${
