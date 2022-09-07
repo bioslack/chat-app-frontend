@@ -41,7 +41,7 @@ const Sidebar = function (props: SidebarProps) {
                 onSelectChat && onSelectChat(chat);
               }}
             >
-              <div className="history-item__picture" />
+              <img className="history-item__picture" src={`http://localhost:8888/img/${chat.picture}`} />
               <div className="history-item__name">{chat.name}</div>
             </div>
           ))}

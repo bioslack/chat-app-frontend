@@ -26,9 +26,8 @@ const ProfileDialog = function ({ onClose, visible }: ProfileDialogProps) {
     if (file) {
       const formData = new FormData();
       formData.append("picture", file);
-      formData.append("userId", userId);
       axiosPrivate
-        .post("upload/image", formData, {
+        .patch("chat", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -46,7 +45,7 @@ const ProfileDialog = function ({ onClose, visible }: ProfileDialogProps) {
         <span className="profile-dialog__close" onClick={onClose}>
           <MdClose size={25} color="#000" />
         </span>
-        <div className="profile-dialog__picture"></div>
+        <img className="profile-dialog__picture" src={`http://localhost:8888/img/${decoded?.picture}`} />
         <form>
           <a
             className="profile-dialog__link"

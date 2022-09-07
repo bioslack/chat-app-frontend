@@ -39,7 +39,7 @@ const ChatScreen = function () {
       <div className="chat-area">
         {selectedChat && (
           <div className="chat-area__header">
-            <div className="chat-area__picture"></div>
+            <img className="chat-area__picture" src={`http://localhost:8888/img/${selectedChat.picture}`} />
             <div>
               <div className="chat-area__name">{selectedChat.name}</div>
               {connected.includes(selectedChat._id) && (
