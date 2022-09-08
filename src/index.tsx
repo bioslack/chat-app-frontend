@@ -7,6 +7,7 @@ import AuthProvider from "./context/AuthProvider";
 import MessagesProvider from "./context/MessagesProvider";
 import SocketProvider from "./context/SocketProvider";
 import ChatProvider from "./context/ChatProvider";
+import UserProvider from "./context/UserProvider";
 
 if (process.env.NODE_ENV === "production") {
   disableReactDevTools();
@@ -18,13 +19,15 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <AuthProvider>
-      <SocketProvider>
-        <MessagesProvider>
-          <ChatProvider>
-            <App />
-          </ChatProvider>
-        </MessagesProvider>
-      </SocketProvider>
+      <UserProvider>
+        <SocketProvider>
+          <MessagesProvider>
+            <ChatProvider>
+              <App />
+            </ChatProvider>
+          </MessagesProvider>
+        </SocketProvider>
+      </UserProvider>
     </AuthProvider>
   </React.StrictMode>
 );

@@ -55,4 +55,46 @@
     text-decoration: none;
     color: #0070AF;
   }
+
+  &__field {
+    position: relative;
+    margin-top: 15px;
+    margin-bottom: 25px;
+  }
+
+  &__btn-edit {
+    position: absolute;
+    top: 0;
+    right: 0;
+    opacity: 0;
+    padding: 7px 10px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: transparent;
+  }
+
+  &__field:hover > &__btn-edit {
+    opacity: 1 !important; // overwrite inline style
+  }
+
+  &__input {
+    display: block;
+    font-weight: bold;
+    color: #000;
+    width: 340px;
+    font-size: 22px;
+    text-align: center;
+    outline: none;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    padding: 5px 35px;
+    background-color: #ededed;
+  }
+  
+  &__input:disabled {
+    outline: none;
+    border: 1px solid transparent;
+    background-color: transparent;
+  }
 }

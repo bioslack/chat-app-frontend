@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import useAuth from "../../hooks/useAuth";
+import useUser from "../../hooks/useUser";
 import Chat from "../../models/Chat";
 import User from "../../models/User";
 import ProfileDialog from "./ProfileDialog";
@@ -13,7 +14,8 @@ interface SidebarProps {
 
 const Sidebar = function (props: SidebarProps) {
   const { chats, onSelectChat } = props;
-  const { decoded, logout } = useAuth();
+  const { logout } = useAuth();
+  const { user } = useUser();
   const [showMenu, setShowMenu] = React.useState(false);
   const [showDialog, setShowDialog] = React.useState(false);
 
@@ -32,7 +34,7 @@ const Sidebar = function (props: SidebarProps) {
       </div>
       <div className="sidebar__history">
         {chats
-          ?.filter((c) => c._id !== decoded?._id)
+          ?.filter((c) => c._id !== user?._id)
           .map((chat, index) => (
             <div
               key={index}
@@ -41,7 +43,10 @@ const Sidebar = function (props: SidebarProps) {
                 onSelectChat && onSelectChat(chat);
               }}
             >
-              <img className="history-item__picture" src={`http://localhost:8888/img/${chat.picture}`} />
+              <img
+                className="history-item__picture"
+                src={`http://localhost:8888/img/${chat.picture}`}
+              />
               <div className="history-item__name">{chat.name}</div>
             </div>
           ))}
@@ -49,11 +54,11 @@ const Sidebar = function (props: SidebarProps) {
       <div className="sidebar__profile-bar">
         <div className="sidebar__picture">
           <img
-            src={`http://localhost:8888/img/${decoded?.picture}`}
+            src={`http://localhost:8888/img/${user?.picture}`}
             alt="profile"
           />
         </div>
-        <div className="sidebar__name">{decoded?.name}</div>
+        <div className="sidebar__name">{user?.name}</div>
         <div className="floating-menu__button">
           <input
             type="checkbox"
