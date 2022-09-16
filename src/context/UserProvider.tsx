@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import User from "../models/User";
@@ -11,12 +11,16 @@ interface UsersProviderData {
   loading: boolean;
   user?: User;
   error?: Object;
+  getUsers: (query: string) => Promise<User[]>;
   refresh: () => Promise<void>;
 }
 
 export const UsersContext = React.createContext<UsersProviderData>({
   loading: false,
   refresh: async () => {},
+  getUsers: async () => {
+    return [];
+  },
 });
 
 const UserProvider = function (props: UsersProviderProps) {
@@ -26,9 +30,9 @@ const UserProvider = function (props: UsersProviderProps) {
   const [error, setError] = useState<Object | undefined>(undefined);
   const axios = useAxiosPrivate();
 
-  const refresh = async () => {
+  const refresh = useCallback(async () => {
     try {
-      setLoading(loading);
+      setLoading(true);
       const res = await axios.get("user");
       console.log("User data ", res.data.user);
       setUser(res.data.user);
@@ -38,14 +42,28 @@ const UserProvider = function (props: UsersProviderProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [axios]);
+
+  const getUsers = useCallback(
+    async (query: string) => {
+      try {
+        const res = await axios.get(`users?name=${query}`);
+
+        return res.data.users as User[];
+      } catch (err) {
+        console.log(err);
+        return [];
+      }
+    },
+    [axios]
+  );
 
   useEffect(() => {
     if (accessToken) refresh();
-  }, [accessToken]);
+  }, [accessToken, refresh]);
 
   return (
-    <UsersContext.Provider value={{ loading, user, error, refresh }}>
+    <UsersContext.Provider value={{ loading, user, error, refresh, getUsers }}>
       {props.children}
     </UsersContext.Provider>
   );

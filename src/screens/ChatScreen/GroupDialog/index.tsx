@@ -7,6 +7,7 @@ import {
   MouseEvent,
 } from "react";
 import { MdClose, MdEdit, MdCheck } from "react-icons/md";
+import { debounce } from "lodash";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Button from "../../../components/Button";
 import useUser from "../../../hooks/useUser";
@@ -23,7 +24,7 @@ const GroupDialog = function ({ onClose, visible }: GroupDialogProps) {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const axios = useAxiosPrivate();
   const [file, setFile] = useState<File | null>();
-  const { user, refresh, loading } = useUser();
+  const { user, refresh, getUsers } = useUser();
   const [name, setName] = useState("");
   const [isEditingName, setIsEditingName] = useState(false);
   const [userId] = useState(`${user?._id}`);
@@ -49,7 +50,7 @@ const GroupDialog = function ({ onClose, visible }: GroupDialogProps) {
         .then(() => refresh())
         .catch((err) => console.log(err));
     },
-    [name]
+    [name, axios, refresh]
   );
 
   const toggleEditName = () => {
@@ -85,11 +86,8 @@ const GroupDialog = function ({ onClose, visible }: GroupDialogProps) {
         .then(() => refresh())
         .catch(() => console.log("Erro"));
     }
-  }, [file, userId]);
+  }, [file, userId, axios, refresh]);
 
-  useEffect(() => {
-    setName(user?.name || "");
-  }, [user]);
   return (
     <div
       className={`overlay ${!visible ? "overlay--hidden" : "overlay--show"}`}
@@ -101,6 +99,7 @@ const GroupDialog = function ({ onClose, visible }: GroupDialogProps) {
         <img
           className="group-dialog__picture"
           src={`http://localhost:8888/img/${user?.picture}`}
+          alt="Profile"
         />
         <form>
           <a
@@ -137,6 +136,7 @@ const GroupDialog = function ({ onClose, visible }: GroupDialogProps) {
             onChange={(e) => setName(e.target.value)}
             onBlur={onBlur}
             disabled={!isEditingName}
+            placeholder="Novo grupo"
           />
           <button
             className="group-dialog__btn-edit"
