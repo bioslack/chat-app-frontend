@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import useAuth from "../../hooks/useAuth";
 import useUser from "../../hooks/useUser";
 import Chat from "../../models/Chat";
-import User from "../../models/User";
+import GroupDialog from "./GroupDialog";
 import ProfileDialog from "./ProfileDialog";
 import SearchBar from "./SearchBar";
 
@@ -16,8 +16,9 @@ const Sidebar = function (props: SidebarProps) {
   const { chats, onSelectChat } = props;
   const { logout } = useAuth();
   const { user } = useUser();
-  const [showMenu, setShowMenu] = React.useState(false);
-  const [showDialog, setShowDialog] = React.useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const [showProfileDialog, setShowProfileDialog] = useState(false);
+  const [showGroupDialog, setShowGroupDialog] = useState(false);
 
   const onChange = function () {
     setShowMenu((prev) => !prev);
@@ -69,8 +70,14 @@ const Sidebar = function (props: SidebarProps) {
           <BsThreeDotsVertical color="#fff" size={25} />
           <ul className="floating-menu">
             <li
+              onClick={() => setShowGroupDialog(true)}
               className="floating-menu__item"
-              onClick={() => setShowDialog(true)}
+            >
+              Criar grupo
+            </li>
+            <li
+              className="floating-menu__item"
+              onClick={() => setShowProfileDialog(true)}
             >
               Configurações
             </li>
@@ -81,8 +88,12 @@ const Sidebar = function (props: SidebarProps) {
         </div>
       </div>
       <ProfileDialog
-        visible={showDialog}
-        onClose={() => setShowDialog(false)}
+        visible={showProfileDialog}
+        onClose={() => setShowProfileDialog(false)}
+      />
+      <GroupDialog
+        visible={showGroupDialog}
+        onClose={() => setShowGroupDialog(false)}
       />
     </div>
   );
