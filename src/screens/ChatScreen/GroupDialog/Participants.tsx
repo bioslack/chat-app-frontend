@@ -1,29 +1,54 @@
 import { useState, useRef, ChangeEventHandler, useEffect } from "react";
-import { MdAdd } from "react-icons/md";
+import { MdAddCircle, MdRemoveCircle } from "react-icons/md";
 import { debounce } from "lodash";
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import User from "../../../models/User";
 
-interface ParticipantProps extends User {
-  add: (id: string | number) => void;
+interface SearchParticipantProps {
+  user: User;
+  add: (user: User) => void;
 }
 
-const Participant = function ({ _id, name, picture, add }: ParticipantProps) {
+const SearchParticipant = function ({ user, add }: SearchParticipantProps) {
   return (
-    <div className="participant__user">
+    <div className="search-card">
       <img
-        src={`http://localhost:8888/img/${picture}`}
-        className="participant__picture"
+        src={`http://localhost:8888/img/${user.picture}`}
+        className="search-card__picture"
         alt="Profile"
       />
-      <div className="participant__name">{name}</div>
-      <MdAdd
-        className="participant__btn"
+      <div className="search-card__name">{user.name}</div>
+      <MdAddCircle
+        className="search-card__btn"
         size={25}
-        color="#000"
-        onClick={() => add(_id)}
+        color="#0a0"
+        onClick={() => add(user)}
+      />
+    </div>
+  );
+};
+
+interface ParticipantProps {
+  user: User;
+  remove: (id: string) => void;
+}
+
+const Participant = function ({ user, remove }: ParticipantProps) {
+  return (
+    <div className="participant-card">
+      <img
+        src={`http://localhost:8888/img/${user.picture}`}
+        className="participant-card__picture"
+        alt="Profile"
+      />
+      <div className="participant-card__name">{user.name}</div>
+      <MdRemoveCircle
+        className="participant-card__btn"
+        size={25}
+        color="#f00"
+        onClick={() => remove(user._id)}
       />
     </div>
   );
@@ -32,7 +57,7 @@ const Participant = function ({ _id, name, picture, add }: ParticipantProps) {
 const Participants = function () {
   const [isSearching, setIsSearching] = useState(false);
   const [search, setSearch] = useState("");
-  const [participants, setParticipants] = useState<Array<string | number>>([]);
+  const [participants, setParticipants] = useState<User[]>([]);
   const [searchResults, setSearchResults] = useState<User[]>([]);
   const axios = useAxiosPrivate();
 
@@ -49,12 +74,12 @@ const Participants = function () {
     };
   }, [handleSearchRequest]);
 
-  const addParticipant = (id: string | number) => {
-    setParticipants((prev) => [...prev, id]);
+  const addParticipant = (user: User) => {
+    setParticipants((prev) => [...prev, user]);
   };
 
   const onBlur = () => {
-    if (!search) setIsSearching(false);
+    setTimeout(() => setIsSearching(false), 200);
   };
   const onFocus = () => {
     setIsSearching(true);
@@ -66,9 +91,9 @@ const Participants = function () {
   };
 
   return (
-    <div className="participant">
-      <form className="partcipant__form">
-        <div className="participant__wrapper">
+    <>
+      <div className="participant">
+        <form className="participant__form">
           <input
             className="participant__search-input"
             value={search}
@@ -77,17 +102,39 @@ const Participants = function () {
             onBlur={onBlur}
           />
           {isSearching && search.trim() && (
-            <SimpleBar className="participant__result-list" unselectable="on">
-              {searchResults
-                .filter((p) => !participants.includes(p._id))
-                .map((p) => (
-                  <Participant key={p._id} add={addParticipant} {...p} />
-                ))}
-            </SimpleBar>
+            <div className="search-container">
+              <SimpleBar
+                style={{ maxHeight: 200, width: "100%" }}
+                unselectable="on"
+              >
+                {searchResults
+                  .filter(
+                    (p) => !participants.map((p) => p._id).includes(p._id)
+                  )
+                  .map((p) => (
+                    <SearchParticipant
+                      key={p._id}
+                      add={addParticipant}
+                      user={p}
+                    />
+                  ))}
+              </SimpleBar>
+            </div>
           )}
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
+      <div className="participant__list">
+        {participants.map((p) => (
+          <Participant
+            key={p._id}
+            user={p}
+            remove={(id: string) => {
+              setParticipants(participants.filter((u) => id !== u._id));
+            }}
+          />
+        ))}
+      </div>
+    </>
   );
 };
 
