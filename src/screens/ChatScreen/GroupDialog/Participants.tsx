@@ -1,4 +1,11 @@
-import { useState, useRef, ChangeEventHandler, useEffect } from "react";
+import {
+  useState,
+  useRef,
+  ChangeEventHandler,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import { MdAddCircle, MdRemoveCircle } from "react-icons/md";
 import { debounce } from "lodash";
 import SimpleBar from "simplebar-react";
@@ -54,10 +61,17 @@ const Participant = function ({ user, remove }: ParticipantProps) {
   );
 };
 
-const Participants = function () {
+interface ParticipantsProps {
+  participants: User[];
+  setParticipants: Dispatch<SetStateAction<User[]>>;
+}
+
+const Participants = function ({
+  participants,
+  setParticipants,
+}: ParticipantsProps) {
   const [isSearching, setIsSearching] = useState(false);
   const [search, setSearch] = useState("");
-  const [participants, setParticipants] = useState<User[]>([]);
   const [searchResults, setSearchResults] = useState<User[]>([]);
   const axios = useAxiosPrivate();
 
@@ -79,7 +93,11 @@ const Participants = function () {
   };
 
   const onBlur = () => {
-    setTimeout(() => setIsSearching(false), 200);
+    setTimeout(() => {
+      setSearch("");
+      setIsSearching(false);
+      setSearchResults([]);
+    }, 200);
   };
   const onFocus = () => {
     setIsSearching(true);
@@ -100,6 +118,7 @@ const Participants = function () {
             onChange={handleSearch}
             onFocus={onFocus}
             onBlur={onBlur}
+            placeholder="Buscar contatos"
           />
           {isSearching && search.trim() && (
             <div className="search-container">
@@ -124,15 +143,21 @@ const Participants = function () {
         </form>
       </div>
       <div className="participant__list">
-        {participants.map((p) => (
-          <Participant
-            key={p._id}
-            user={p}
-            remove={(id: string) => {
-              setParticipants(participants.filter((u) => id !== u._id));
-            }}
-          />
-        ))}
+        {participants.length ? (
+          participants.map((p) => (
+            <Participant
+              key={p._id}
+              user={p}
+              remove={(id: string) => {
+                setParticipants(participants.filter((u) => id !== u._id));
+              }}
+            />
+          ))
+        ) : (
+          <div style={{ textAlign: "center", padding: 15 }}>
+            Adicione contatos
+          </div>
+        )}
       </div>
     </>
   );

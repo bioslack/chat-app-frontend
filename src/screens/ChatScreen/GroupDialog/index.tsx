@@ -5,13 +5,16 @@ import {
   useCallback,
   FormEvent,
   MouseEvent,
+  ChangeEventHandler,
 } from "react";
 import { MdClose, MdEdit, MdCheck } from "react-icons/md";
+import { TbCameraPlus, TbCameraMinus } from "react-icons/tb";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Button from "../../../components/Button";
 import useUser from "../../../hooks/useUser";
 import "./styles.scss";
 import Participants from "./Participants";
+import User from "../../../models/User";
 
 interface GroupDialogProps {
   onClose?: () => void;
@@ -21,36 +24,39 @@ interface GroupDialogProps {
 const GroupDialog = function ({ onClose, visible }: GroupDialogProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
+  const [pictureURL, setPictureURL] = useState(
+    "http://localhost:8888/img/default.png"
+  );
   const axios = useAxiosPrivate();
   const [file, setFile] = useState<File | null>();
-  const { user, refresh, getUsers } = useUser();
+  const { user, refresh } = useUser();
   const [name, setName] = useState("");
   const [isEditingName, setIsEditingName] = useState(false);
+  const [participants, setParticipants] = useState<User[]>([]);
   const [userId] = useState(`${user?._id}`);
 
-  const handleAlterPicture = (event: MouseEvent) => {
+  const handleClickAlterPictureBtn = (event: MouseEvent) => {
     event.preventDefault();
     fileInputRef.current?.click();
   };
 
-  const handleRemovePicture = (event: MouseEvent) => {
-    event.preventDefault();
-    axios
-      .delete("chat/picture")
-      .then(() => refresh())
-      .catch(() => console.log("Erro"));
+  const handleChangePicture: ChangeEventHandler<HTMLInputElement> = (event) => {
+    const input = event.target;
+    if (input.files && input.files.length) {
+      setFile(input.files[0]);
+      setPictureURL(URL.createObjectURL(input.files[0]));
+    }
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const handleFormEditName = useCallback(
-    (event: FormEvent) => {
-      event.preventDefault();
-      axios
-        .patch("chat", { name })
-        .then(() => refresh())
-        .catch((err) => console.log(err));
-    },
-    [name, axios, refresh]
-  );
+  const handleRemovePicture = (event: MouseEvent) => {
+    event.preventDefault();
+    setPictureURL("http://localhost:8888/img/default.png");
+  };
+
+  const handleFormEditName = useCallback((event: FormEvent) => {
+    event.preventDefault();
+  }, []);
 
   const toggleEditName = () => {
     setIsEditingName((prev) => {
@@ -72,41 +78,48 @@ const GroupDialog = function ({ onClose, visible }: GroupDialogProps) {
     }, 150);
   };
 
-  useEffect(() => {
-    if (file) {
-      const formData = new FormData();
-      formData.append("picture", file);
-      axios
-        .patch("chat", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then(() => refresh())
-        .catch(() => console.log("Erro"));
-    }
-  }, [file, userId, axios, refresh]);
+  const handleClose = useCallback(() => {
+    setParticipants([]);
+    setFile(undefined);
+
+    setName("");
+    setPictureURL("http://localhost:8888/img/default.png");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+    onClose && onClose();
+  }, [onClose]);
+
+  // useEffect(() => {
+  //   if (file && profilePictureRef.current) {
+  //     profilePictureRef.current.src = URL.createObjectURL(file);
+  //     // const formData = new FormData();
+  //     // formData.append("picture", file);
+  //     // axios
+  //     //   .patch("chat", formData, {
+  //     //     headers: {
+  //     //       "Content-Type": "multipart/form-data",
+  //     //     },
+  //     //   })
+  //     //   .then(() => refresh())
+  //     //   .catch(() => console.log("Erro"));
+  //   }
+  // }, [file]);
 
   return (
     <div
       className={`overlay ${!visible ? "overlay--hidden" : "overlay--show"}`}
     >
       <div className="group-dialog">
-        <span className="group-dialog__close" onClick={onClose}>
+        <span className="group-dialog__close" onClick={handleClose}>
           <MdClose size={25} color="#000" />
         </span>
-        <img
-          className="group-dialog__picture"
-          src={`http://localhost:8888/img/${user?.picture}`}
-          alt="Profile"
-        />
-        <form>
+        <img className="group-dialog__picture" src={pictureURL} alt="Profile" />
+        <form className="group-dialog__picture-buttons">
           <a
             className="group-dialog__link"
             href="#alterar"
-            onClick={handleAlterPicture}
+            onClick={handleClickAlterPictureBtn}
           >
-            alterar
+            <TbCameraPlus size={20} />
           </a>
           <input
             ref={fileInputRef}
@@ -114,17 +127,14 @@ const GroupDialog = function ({ onClose, visible }: GroupDialogProps) {
             type="file"
             accept="image/*"
             className="group-dialog__file"
-            // @ts-ignore
-            onChange={(event) => setFile(event.target.files[0])}
+            onChange={handleChangePicture}
           />
-          <input type="hidden" name="userId" value={userId} />
-          &nbsp; &nbsp;
           <a
             className="group-dialog__link"
             href="#remover"
             onClick={handleRemovePicture}
           >
-            remover
+            <TbCameraMinus size={20} />
           </a>
         </form>
         <form onSubmit={handleFormEditName} className="group-dialog__field">
@@ -150,7 +160,10 @@ const GroupDialog = function ({ onClose, visible }: GroupDialogProps) {
             )}
           </button>
         </form>
-        <Participants />
+        <Participants
+          participants={participants}
+          setParticipants={setParticipants}
+        />
         <Button color="okay" title="Criar grupo" type="button" />
       </div>
     </div>
