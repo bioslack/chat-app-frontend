@@ -11,7 +11,6 @@ import { MdClose, MdEdit, MdCheck } from "react-icons/md";
 import { TbCameraPlus, TbCameraMinus } from "react-icons/tb";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Button from "../../../components/Button";
-import useUser from "../../../hooks/useUser";
 import "./styles.scss";
 import Participants from "./Participants";
 import User from "../../../models/User";
@@ -29,11 +28,9 @@ const GroupDialog = function ({ onClose, visible }: GroupDialogProps) {
   );
   const axios = useAxiosPrivate();
   const [file, setFile] = useState<File | null>();
-  const { user, refresh } = useUser();
   const [name, setName] = useState("");
   const [isEditingName, setIsEditingName] = useState(false);
   const [participants, setParticipants] = useState<User[]>([]);
-  const [userId] = useState(`${user?._id}`);
 
   const handleClickAlterPictureBtn = (event: MouseEvent) => {
     event.preventDefault();
@@ -88,21 +85,22 @@ const GroupDialog = function ({ onClose, visible }: GroupDialogProps) {
     onClose && onClose();
   }, [onClose]);
 
-  // useEffect(() => {
-  //   if (file && profilePictureRef.current) {
-  //     profilePictureRef.current.src = URL.createObjectURL(file);
-  //     // const formData = new FormData();
-  //     // formData.append("picture", file);
-  //     // axios
-  //     //   .patch("chat", formData, {
-  //     //     headers: {
-  //     //       "Content-Type": "multipart/form-data",
-  //     //     },
-  //     //   })
-  //     //   .then(() => refresh())
-  //     //   .catch(() => console.log("Erro"));
-  //   }
-  // }, [file]);
+  const handleSaveGroup = () => {
+    const formData = new FormData();
+    if (file) formData.append("picture", file);
+    formData.append("members", JSON.stringify(participants.map((u) => u._id)));
+    formData.append("name", name);
+
+    axios
+      .post("chat", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then(() => alert("success"))
+      .catch(() => alert("Fail"))
+      .finally(() => handleClose());
+  };
 
   return (
     <div
@@ -164,7 +162,12 @@ const GroupDialog = function ({ onClose, visible }: GroupDialogProps) {
           participants={participants}
           setParticipants={setParticipants}
         />
-        <Button color="okay" title="Criar grupo" type="button" />
+        <Button
+          color="okay"
+          title="Criar grupo"
+          type="button"
+          onClick={handleSaveGroup}
+        />
       </div>
     </div>
   );

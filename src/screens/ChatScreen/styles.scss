@@ -21,6 +21,8 @@
 
   &__history {
     flex: 1;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
   }
 
   &__profile-bar {
