@@ -58,9 +58,11 @@ const MessagesProvider = function (props: MessagesProviderProps) {
     let mounted = true;
 
     if (!currentChat) return;
-    axios.get(`/chats/messages?_id=${currentChat._id}`).then((res) => {
-      if (mounted) setMessages(res.data.messages);
-    });
+    axios
+      .get(`/chats/messages?_id=${currentChat._id}&group_id=${currentChat._id}`)
+      .then((res) => {
+        if (mounted) setMessages(res.data.messages);
+      });
 
     return () => {
       mounted = false;

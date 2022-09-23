@@ -189,6 +189,10 @@
   &--sent {
     align-items: flex-start;
   }
+  
+  &--received {
+    align-items: flex-end;
+  }
 
   &--sent > &__text {
     background-color: #fcffec;

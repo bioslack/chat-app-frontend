@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import io, { Socket } from "socket.io-client";
 import useAuth from "../hooks/useAuth";
-import useMessages from "../hooks/useMessages";
+import useUser from "../hooks/useUser";
 import Message from "../models/Message";
 
 const socket = io("ws://localhost:8888");
@@ -26,27 +26,31 @@ export const SocketContext = React.createContext<SocketProviderData>({
 
 const SocketProvider = function ({ children }: SocketProviderProps) {
   const [isConnected, setIsConnected] = React.useState(socket.connected);
-  const { decoded } = useAuth();
+  const { user, groups } = useUser();
   const [connected, setConnected] = useState<string[]>([]);
 
   const emitMessage = React.useCallback(
     (message: Message) => {
-      if (!decoded) return;
+      if (!user) return;
       socket.emit("send-message", message);
     },
-    [decoded]
+    [user]
   );
 
   React.useEffect(() => {
-    if (decoded) {
+    if (user) {
       socket.connect();
-      socket.emit("user-connected", decoded._id);
+      socket.emit(
+        "user-connected",
+        user._id,
+        groups.map((group) => group._id)
+      );
     }
 
-    if (!decoded) {
+    if (!user) {
       socket.disconnect();
     }
-  }, [decoded]);
+  }, [user]);
 
   useEffect(() => {
     socket.on("connect", () => {
