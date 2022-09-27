@@ -6,10 +6,9 @@ import useMessages from "../../hooks/useMessages";
 import ChatText from "./ChatText";
 import useChats from "../../hooks/useChats";
 import Chat from "../../models/Chat";
-import useSocket from "../../hooks/useSocket";
+import ChatHeader from "./ChatHeader";
 
 const ChatScreen = function () {
-  const { connected } = useSocket();
   const [selectedChat, setSelectedChat] = React.useState<Chat>();
   const { sendMessage, setCurrentChat, messages } = useMessages();
   const messagesDivRef = React.useRef<HTMLDivElement>();
@@ -28,25 +27,11 @@ const ChatScreen = function () {
     messagesDivRef.current?.scrollTo({ top: scrollValue });
   }, [messages]);
 
-  useEffect(() => {
-    console.log(connected);
-  }, [connected]);
-
   return (
     <div className="chat-screen">
       <Sidebar onSelectChat={handleSelectChat} />
       <div className="chat-area">
-        {selectedChat && (
-          <div className="chat-area__header">
-            <img className="chat-area__picture" src={`http://localhost:8888/img/${selectedChat.picture}`} />
-            <div>
-              <div className="chat-area__name">{selectedChat.name}</div>
-              {connected.includes(selectedChat._id) && (
-                <div className="chat-area__status">online</div>
-              )}
-            </div>
-          </div>
-        )}
+        {selectedChat && <ChatHeader selectedChat={selectedChat} />}
         {/* @ts-ignore */}
         <div ref={messagesDivRef} className="chat-area__messages">
           {messages?.map((m, index) => (

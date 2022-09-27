@@ -1,5 +1,4 @@
 import { ChangeEventHandler, FocusEventHandler } from "react";
-import "./styles.scss";
 
 export type InputMessage = "okay" | "warn" | "danger";
 

@@ -2,11 +2,11 @@
   position: relative;
   background-color: #fafafa;
   width: 100%;
-  padding: 16px;
+  padding: 1.6rem;
   outline: none;
-  border: 1px solid #d8d8d8;
-  border-radius: 9px;
-  font-size: 16px;
+  border: 0.1rem solid #d8d8d8;
+  border-radius: 0.9rem;
+  font-size: 1.6rem;
 
   &:disabled::placeholder,
   &:disabled {
@@ -24,8 +24,8 @@
 
   &__message {
     display: inline-block;
-    font-size: 12px;
-    margin-bottom: 5px;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
 
     &--okay {
       color: #0f0;

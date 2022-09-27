@@ -1,35 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
-
-*,
-*::after,
-*::before {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  font-family: "Inter", sans-serif;
-}
-/* width */
-::-webkit-scrollbar {
-  width: 8px;
-  right: 2px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #cfcfcf;
-  border-radius: 10px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #5db075;
-}
-
-body {
-  background-color: #fff;
-  // background-image: linear-gradient(to right, #009124, #a2ffb9);
-}
+@import "./base/base";
+@import "./abstracts/variables";
+@import "./abstracts/mixins";
+@import "./components/button";
+@import "./components/card";
+@import "./components/floating-menu";
+@import "./components/chat";
+@import "./components/searchbar";
+@import "./components/textinput";
+@import "./components/profile";
+@import "./components/chat-list";
+@import "./components/chat-header";
+@import "./components/dialog";
+@import "./components/participants-list";

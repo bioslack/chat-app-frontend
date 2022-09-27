@@ -1,0 +1,50 @@
+.floating-menu {
+  display: block;
+  position: absolute;
+  list-style: none;
+  font-size: $font-normal;
+  border-radius: 0.5em;
+  box-shadow: 0 0.5em 1em $shadow-color;
+  background-color: #fff;
+  bottom: 3.5em;
+  right: 0;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 200ms;
+
+  &__button {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 4em;
+    height: 4em;
+    transition: box-shadow 250ms;
+    border: 0.1em solid #fff;
+    font-size: $font-small;
+
+    & input[type="checkbox"] {
+      position: absolute;
+      height: 5em;
+      width: 5em;
+      opacity: 0;
+    }
+  }
+
+  &__button input[type="checkbox"]:checked ~ & {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  &__item {
+    display: block;
+    padding: 0.8em 1.2em;
+    transition: background-color 250ms;
+
+    &:hover {
+      background-color: #e2e2e2;
+    }
+  }
+}

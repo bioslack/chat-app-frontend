@@ -10,7 +10,6 @@ import { MdClose, MdEdit, MdCheck } from "react-icons/md";
 import Button from "../../../components/Button";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import useUser from "../../../hooks/useUser";
-import "./styles.scss";
 
 interface ProfileDialogProps {
   onClose?: () => void;
@@ -92,19 +91,21 @@ const ProfileDialog = function ({ onClose, visible }: ProfileDialogProps) {
 
   return (
     <div
-      className={`overlay ${!visible ? "overlay--hidden" : "overlay--show"}`}
+      className={`dialog__overlay ${
+        !visible ? "dialog__overlay--hidden" : "dialog__overlay--show"
+      }`}
     >
-      <div className="profile-dialog">
-        <span className="profile-dialog__close" onClick={onClose}>
+      <div className="dialog">
+        <span className="dialog__close" onClick={onClose}>
           <MdClose size={25} color="#000" />
         </span>
         <img
-          className="profile-dialog__picture"
+          className="dialog__picture"
           src={`http://localhost:8888/img/${user?.picture}`}
         />
         <form>
           <a
-            className="profile-dialog__link"
+            className="dialog__link"
             href="#alterar"
             onClick={handleAlterPicture}
           >
@@ -115,14 +116,14 @@ const ProfileDialog = function ({ onClose, visible }: ProfileDialogProps) {
             name="picture"
             type="file"
             accept="image/*"
-            className="profile-dialog__file"
+            className="dialog__file"
             // @ts-ignore
             onChange={(event) => setFile(event.target.files[0])}
           />
           <input type="hidden" name="userId" value={userId} />
           &nbsp; &nbsp;
           <a
-            className="profile-dialog__link"
+            className="dialog__link"
             href="#remover"
             onClick={handleRemovePicture}
           >
@@ -132,17 +133,17 @@ const ProfileDialog = function ({ onClose, visible }: ProfileDialogProps) {
         {/* <Heading type="h1" style={{ marginTop: 10, marginBottom: 25 }}>
           {`${user?.name}`}
         </Heading> */}
-        <form onSubmit={handleFormEditName} className="profile-dialog__field">
+        <form onSubmit={handleFormEditName} className="dialog__field">
           <input
             ref={nameInputRef}
             value={name}
-            className="profile-dialog__input"
+            className="dialog__input"
             onChange={(e) => setName(e.target.value)}
             onBlur={onBlur}
             disabled={!isEditingName}
           />
           <button
-            className="profile-dialog__btn-edit"
+            className="dialog__btn-edit"
             onClick={toggleEditName}
             style={{ opacity: isEditingName ? 1 : 0 }}
             type={!isEditingName ? "submit" : "button"}
@@ -154,6 +155,7 @@ const ProfileDialog = function ({ onClose, visible }: ProfileDialogProps) {
             )}
           </button>
         </form>
+        <div className="dialog__spacer" />
         <Button color="danger" title="Excluir conta" type="button" />
       </div>
     </div>

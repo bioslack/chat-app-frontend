@@ -1,5 +1,4 @@
 import { CSSProperties } from "react";
-import "./styles.scss";
 
 interface TextInputProps {
   type: "button" | "submit" | "reset";

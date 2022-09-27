@@ -1,35 +1,44 @@
-.overlay {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  background-color: #00000091;
-  z-index: 999999;
-  transition: opacity 200ms;
-
-  &--show {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  &--hidden {
-    transform: scale(0);
-    opacity: 0;
-  }
-}
-
-.profile-dialog {
+.dialog {
   position: relative;
   flex-direction: column;
   display: flex;
   align-items: center;
   padding: 25px 15px 15px;
   width: 400px;
+  height: 95vh;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 5px 10px #333333;
+
+  &__overlay {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: #00000091;
+    z-index: 999999;
+    transition: opacity 200ms;
+
+    &--show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    &--hidden {
+      transform: scale(0);
+      opacity: 0;
+    }
+  }
+
+  &__picture-buttons {
+    display: flex;
+    justify-content: space-around;
+    width: 25%;
+  }
 
   &__close {
     position: absolute;
@@ -39,8 +48,8 @@
   }
 
   &__picture {
-    width: 200px;
-    height: 200px;
+    width: 110px;
+    height: 110px;
     background-color: #bebebe;
     border-radius: 50%;
     margin-bottom: 5px;
@@ -53,13 +62,13 @@
   &__link:link,
   &__link:visited {
     text-decoration: none;
-    color: #0070AF;
+    color: #0070af;
   }
 
   &__field {
     position: relative;
     margin-top: 15px;
-    margin-bottom: 25px;
+    margin-bottom: 5px;
   }
 
   &__btn-edit {
@@ -91,10 +100,14 @@
     padding: 5px 35px;
     background-color: #ededed;
   }
-  
+
   &__input:disabled {
     outline: none;
     border: 1px solid transparent;
     background-color: transparent;
+  }
+
+  &__spacer {
+    flex: 1;
   }
 }

@@ -1,0 +1,35 @@
+.chat {
+  display: flex;
+  padding: 1rem 1.5rem 0;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: $font-normal;
+
+  &--sent {
+    align-items: flex-start;
+  }
+
+  &--received {
+    align-items: flex-end;
+  }
+
+  &--sent > &__text {
+    background-color: #fcffec;
+  }
+
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+
+  &__text {
+    width: 400px;
+    background-color: #b2f1c4;
+    border-radius: 0.5rem;
+    padding: 0.6em 1.5rem;
+  }
+
+  &__date {
+    margin-top: 0.5rem;
+    font-size: $font-small;
+  }
+}

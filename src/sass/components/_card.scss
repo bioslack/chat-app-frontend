@@ -1,0 +1,27 @@
+.card {
+  display: flex;
+  align-items: center;
+  padding: 1em 1.5rem;
+  border-bottom: 0.1rem solid #e7e7e7;
+  cursor: pointer;
+  transition: background-color 150ms;
+  font-size: $font-normal;
+
+  &:hover {
+    background-color: #f3f3f3;
+  }
+
+  &__name {
+    flex: 1;
+    margin-left: 1.5rem;
+    font-weight: bold;
+    color: $text-color;
+  }
+
+  &__picture {
+    border-radius: 50%;
+    background-color: #d8d8d8;
+    width: 6rem;
+    height: 6rem;
+  }
+}

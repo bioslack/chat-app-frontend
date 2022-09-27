@@ -1,0 +1,23 @@
+.searchbar {
+  padding: 1.3em 1.5em;
+  background-color: $color-primary;
+  height: 7rem;
+  box-shadow: 0 0.2em 0.5em $shadow-color;
+  z-index: 10000;
+
+  &__input {
+    background-color: #f6f6f6;
+    width: 100%;
+    padding: 1.6rem;
+    outline: none;
+    border: 0.1rem solid #e8e8e8;
+    border-radius: 10em;
+    font-size: $font-normal;
+    height: 4.4rem;
+    resize: none;
+    &::-webkit-scrollbar-thumb,
+    &::-webkit-scrollbar-track {
+      display: none;
+    }
+  }
+}

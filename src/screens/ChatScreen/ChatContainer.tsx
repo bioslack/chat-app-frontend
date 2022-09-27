@@ -12,17 +12,17 @@ const ChatContainer = React.forwardRef(
     const chatBody = (
       <>
         <img
-          className="history-item__picture"
+          className="card__picture"
           src={`http://localhost:8888/img/${chat.picture}`}
         />
-        <div className="history-item__name">{chat.name}</div>
+        <div className="card__name">{chat.name}</div>
       </>
     );
 
     const content = ref ? (
       <div
         onClick={() => onSelectChat && onSelectChat(chat)}
-        className="history-item"
+        className="card"
         // @ts-ignore
         ref={ref}
       >
@@ -31,7 +31,7 @@ const ChatContainer = React.forwardRef(
     ) : (
       <div
         onClick={() => onSelectChat && onSelectChat(chat)}
-        className="history-item"
+        className="card"
       >
         {chatBody}
       </div>

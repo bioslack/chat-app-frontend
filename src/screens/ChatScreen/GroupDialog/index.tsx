@@ -11,7 +11,6 @@ import { MdClose, MdEdit, MdCheck } from "react-icons/md";
 import { TbCameraPlus, TbCameraMinus } from "react-icons/tb";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Button from "../../../components/Button";
-import "./styles.scss";
 import Participants from "./Participants";
 import User from "../../../models/User";
 
@@ -104,16 +103,18 @@ const GroupDialog = function ({ onClose, visible }: GroupDialogProps) {
 
   return (
     <div
-      className={`overlay ${!visible ? "overlay--hidden" : "overlay--show"}`}
+      className={`dialog__overlay ${
+        !visible ? "dialog__overlay--hidden" : "dialog__overlay--show"
+      }`}
     >
-      <div className="group-dialog">
-        <span className="group-dialog__close" onClick={handleClose}>
+      <div className="dialog">
+        <span className="dialog__close" onClick={handleClose}>
           <MdClose size={25} color="#000" />
         </span>
-        <img className="group-dialog__picture" src={pictureURL} alt="Profile" />
-        <form className="group-dialog__picture-buttons">
+        <img className="dialog__picture" src={pictureURL} alt="Profile" />
+        <form className="dialog__picture-buttons">
           <a
-            className="group-dialog__link"
+            className="dialog__link"
             href="#alterar"
             onClick={handleClickAlterPictureBtn}
           >
@@ -124,29 +125,29 @@ const GroupDialog = function ({ onClose, visible }: GroupDialogProps) {
             name="picture"
             type="file"
             accept="image/*"
-            className="group-dialog__file"
+            className="dialog__file"
             onChange={handleChangePicture}
           />
           <a
-            className="group-dialog__link"
+            className="dialog__link"
             href="#remover"
             onClick={handleRemovePicture}
           >
             <TbCameraMinus size={20} />
           </a>
         </form>
-        <form onSubmit={handleFormEditName} className="group-dialog__field">
+        <form onSubmit={handleFormEditName} className="dialog__field">
           <input
             ref={nameInputRef}
             value={name}
-            className="group-dialog__input"
+            className="dialog__input"
             onChange={(e) => setName(e.target.value)}
             onBlur={onBlur}
             disabled={!isEditingName}
             placeholder="Novo grupo"
           />
           <button
-            className="group-dialog__btn-edit"
+            className="dialog__btn-edit"
             onClick={toggleEditName}
             style={{ opacity: isEditingName ? 1 : 0 }}
             type={!isEditingName ? "submit" : "button"}
