@@ -9,7 +9,6 @@ import Chat from "../../models/Chat";
 import useSocket from "../../hooks/useSocket";
 
 const ChatScreen = function () {
-  const { chats } = useChats();
   const { connected } = useSocket();
   const [selectedChat, setSelectedChat] = React.useState<Chat>();
   const { sendMessage, setCurrentChat, messages } = useMessages();
@@ -35,7 +34,7 @@ const ChatScreen = function () {
 
   return (
     <div className="chat-screen">
-      <Sidebar chats={chats} onSelectChat={handleSelectChat} />
+      <Sidebar onSelectChat={handleSelectChat} />
       <div className="chat-area">
         {selectedChat && (
           <div className="chat-area__header">

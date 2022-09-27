@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
+import { AxiosRequestConfig } from "axios";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import Chat from "../models/Chat";
@@ -9,6 +10,11 @@ interface ChatProviderProps {
 
 interface ChatProviderData {
   chats: Chat[];
+  getChats: (
+    search: string,
+    page: number,
+    options: AxiosRequestConfig
+  ) => Promise<Chat[]>;
   error: Object;
   isLoading: boolean;
 }
@@ -17,6 +23,7 @@ export const ChatContext = React.createContext<ChatProviderData>({
   chats: [],
   error: "",
   isLoading: false,
+  getChats: async () => [],
 });
 
 const ChatProvider = function (props: ChatProviderProps) {
@@ -26,17 +33,23 @@ const ChatProvider = function (props: ChatProviderProps) {
   const [error, setError] = React.useState("");
   const [chats, setChats] = React.useState<Chat[]>([]);
 
+  const getChats = async (
+    search: string,
+    page: number,
+    options: AxiosRequestConfig
+  ) => {
+    const res = await axios.get(`/chats?search=${search}&page=${page}`, options);
+    return res.data.chats as Chat[];
+  };
+
   useEffect(() => {
-    setIsLoading(true);
-    axios
-      .get("/chats")
-      .then((res) => setChats(res.data.chats))
-      .catch((err) => setError(`${err}`))
-      .finally(() => setIsLoading(false));
+    const controller = new AbortController();
+
+    return () => controller.abort();
   }, [axios, accessToken]);
 
   return (
-    <ChatContext.Provider value={{ chats, error, isLoading }}>
+    <ChatContext.Provider value={{ chats, error, isLoading, getChats }}>
       {props.children}
     </ChatContext.Provider>
   );

@@ -1,24 +1,45 @@
-import React, { useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import useAuth from "../../hooks/useAuth";
+import useChats from "../../hooks/useChats";
+import useSearchChats from "../../hooks/useSearchChats";
 import useUser from "../../hooks/useUser";
 import Chat from "../../models/Chat";
+import ChatContainer from "./ChatContainer";
 import GroupDialog from "./GroupDialog";
 import ProfileDialog from "./ProfileDialog";
 import SearchBar from "./SearchBar";
 
 interface SidebarProps {
-  chats?: Chat[];
   onSelectChat?: (user: Chat) => void;
 }
 
 const Sidebar = function (props: SidebarProps) {
-  const { chats, onSelectChat } = props;
+  const { onSelectChat } = props;
   const { logout } = useAuth();
   const { user } = useUser();
   const [showMenu, setShowMenu] = useState(false);
   const [showProfileDialog, setShowProfileDialog] = useState(false);
   const [showGroupDialog, setShowGroupDialog] = useState(false);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const { chats, isLoading, hasNextPage } = useSearchChats(search, page);
+  const intersection = useRef<IntersectionObserver>();
+  const lastChatRef = useCallback(
+    // @ts-ignore
+    (chat) => {
+      if (isLoading) return;
+
+      if (intersection.current) intersection.current.disconnect();
+
+      intersection.current = new IntersectionObserver((chats) => {
+        if (chats[0].isIntersecting && hasNextPage) setPage((prev) => prev + 1);
+      });
+
+      if (chat) intersection.current.observe(chat);
+    },
+    [isLoading, hasNextPage]
+  );
 
   const onChange = function () {
     setShowMenu((prev) => !prev);
@@ -31,25 +52,18 @@ const Sidebar = function (props: SidebarProps) {
   return (
     <div className="sidebar">
       <div className="sidebar__search">
-        <SearchBar />
+        <SearchBar search={search} setSearch={setSearch} />
       </div>
       <div className="sidebar__history">
         {chats
           ?.filter((c) => c._id !== user?._id)
-          .map((chat, index) => (
-            <div
-              key={index}
-              className="history-item"
-              onClick={() => {
-                onSelectChat && onSelectChat(chat);
-              }}
-            >
-              <img
-                className="history-item__picture"
-                src={`http://localhost:8888/img/${chat.picture}`}
-              />
-              <div className="history-item__name">{chat.name}</div>
-            </div>
+          .map((chat) => (
+            <ChatContainer
+              ref={lastChatRef}
+              onSelectChat={onSelectChat}
+              chat={chat}
+              key={chat._id}
+            />
           ))}
       </div>
       <div className="sidebar__profile-bar">
