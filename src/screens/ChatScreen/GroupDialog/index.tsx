@@ -13,6 +13,7 @@ import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import Button from "../../../components/Button";
 import Participants from "./Participants";
 import User from "../../../models/User";
+import { IMAGE_ROOT_SOURCE } from "../../../api/axios";
 
 interface GroupDialogProps {
   onClose?: () => void;
@@ -23,7 +24,7 @@ const GroupDialog = function ({ onClose, visible }: GroupDialogProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
   const [pictureURL, setPictureURL] = useState(
-    "http://localhost:8888/img/default.png"
+    `${IMAGE_ROOT_SOURCE}/default.png`
   );
   const axios = useAxiosPrivate();
   const [file, setFile] = useState<File | null>();
@@ -47,7 +48,7 @@ const GroupDialog = function ({ onClose, visible }: GroupDialogProps) {
 
   const handleRemovePicture = (event: MouseEvent) => {
     event.preventDefault();
-    setPictureURL("http://localhost:8888/img/default.png");
+    setPictureURL(`${IMAGE_ROOT_SOURCE}/default.png`);
   };
 
   const handleFormEditName = useCallback((event: FormEvent) => {
@@ -79,7 +80,7 @@ const GroupDialog = function ({ onClose, visible }: GroupDialogProps) {
     setFile(undefined);
 
     setName("");
-    setPictureURL("http://localhost:8888/img/default.png");
+    setPictureURL(`${IMAGE_ROOT_SOURCE}/default.png`);
     if (fileInputRef.current) fileInputRef.current.value = "";
     onClose && onClose();
   }, [onClose]);

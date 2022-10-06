@@ -8,6 +8,7 @@ import MessagesProvider from "./context/MessagesProvider";
 import SocketProvider from "./context/SocketProvider";
 import ChatProvider from "./context/ChatProvider";
 import UserProvider from "./context/UserProvider";
+import SidebarProvider from "./context/SidebarProvider";
 
 if (process.env.NODE_ENV === "production") {
   disableReactDevTools();
@@ -23,7 +24,9 @@ root.render(
         <SocketProvider>
           <MessagesProvider>
             <ChatProvider>
-              <App />
+              <SidebarProvider>
+                <App />
+              </SidebarProvider>
             </ChatProvider>
           </MessagesProvider>
         </SocketProvider>

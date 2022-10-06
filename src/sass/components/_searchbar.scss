@@ -1,9 +1,12 @@
 .searchbar {
+  display: flex;
   padding: 1.3em 1.5em;
   background-color: $color-primary;
   height: 7rem;
   box-shadow: 0 0.2em 0.5em $shadow-color;
   z-index: 10000;
+  flex-direction: row;
+  align-items: center;
 
   &__input {
     background-color: #f6f6f6;

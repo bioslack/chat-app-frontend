@@ -1,4 +1,6 @@
-import { ChangeEventHandler} from "react";
+import { ChangeEventHandler } from "react";
+import { MdClose } from "react-icons/md";
+import useSidebar from "../../hooks/useSidebar";
 
 interface SearchBarProps {
   search: string;
@@ -6,6 +8,7 @@ interface SearchBarProps {
 }
 
 const SearchBar = ({ search, setSearch }: SearchBarProps) => {
+  const { setClassName } = useSidebar();
   const handleSearchInput: ChangeEventHandler<HTMLInputElement> = function (
     event
   ) {

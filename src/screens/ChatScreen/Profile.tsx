@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { IMAGE_ROOT_SOURCE } from "../../api/axios";
 import useAuth from "../../hooks/useAuth";
 import User from "../../models/User";
 import GroupDialog from "./GroupDialog";
@@ -25,7 +26,7 @@ const Profile = ({ user }: ProfileProps) => {
   return (
     <div className="profile">
       <div className="profile__picture">
-        <img src={`http://localhost:8888/img/${user?.picture}`} alt="profile" />
+        <img src={`${IMAGE_ROOT_SOURCE}/${user?.picture}`} alt="profile" />
       </div>
       <div className="profile__name">{user?.name}</div>
       <div className="floating-menu__button">

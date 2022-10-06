@@ -2,6 +2,7 @@ import React, { useCallback, useRef, useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import useChats from "../../hooks/useChats";
 import useSearchChats from "../../hooks/useSearchChats";
+import useSidebar from "../../hooks/useSidebar";
 import useUser from "../../hooks/useUser";
 import Chat from "../../models/Chat";
 import ChatContainer from "./ChatContainer";
@@ -17,6 +18,7 @@ interface SidebarProps {
 const Sidebar = function (props: SidebarProps) {
   const { onSelectChat } = props;
   const { user } = useUser();
+  const { className } = useSidebar();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const { chats, isLoading, hasNextPage } = useSearchChats(search, page);
@@ -38,7 +40,7 @@ const Sidebar = function (props: SidebarProps) {
   );
 
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${className}`}>
       <SearchBar search={search} setSearch={setSearch} />
       <div className="chat-list">
         {chats

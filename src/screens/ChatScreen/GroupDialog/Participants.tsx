@@ -12,6 +12,7 @@ import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import User from "../../../models/User";
+import { IMAGE_ROOT_SOURCE } from "../../../api/axios";
 
 interface SearchParticipantProps {
   user: User;
@@ -22,7 +23,7 @@ const SearchParticipant = function ({ user, add }: SearchParticipantProps) {
   return (
     <div className="search-card">
       <img
-        src={`http://localhost:8888/img/${user.picture}`}
+        src={`${IMAGE_ROOT_SOURCE}/${user.picture}`}
         className="search-card__picture"
         alt="Profile"
       />
@@ -46,7 +47,7 @@ const Participant = function ({ user, remove }: ParticipantProps) {
   return (
     <div className="participant-card">
       <img
-        src={`http://localhost:8888/img/${user.picture}`}
+        src={`${IMAGE_ROOT_SOURCE}/${user.picture}`}
         className="participant-card__picture"
         alt="Profile"
       />

@@ -1,0 +1,9 @@
+.toggle-sidebar {
+  color: #fff;
+  cursor: pointer;
+  display: none;
+
+  @include respond(tab-port) {
+    display: block;
+  }
+}

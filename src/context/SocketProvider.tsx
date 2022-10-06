@@ -4,7 +4,7 @@ import useAuth from "../hooks/useAuth";
 import useUser from "../hooks/useUser";
 import Message from "../models/Message";
 
-const socket = io("ws://localhost:8888");
+const socket = io("ws://192.168.3.21:8888");
 
 interface SocketProviderProps {
   children?: ReactNode | ReactNode[];

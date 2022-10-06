@@ -1,0 +1,33 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  flex: 2;
+  height: 100vh;
+  z-index: 1000;
+  box-shadow: 0 -1.5rem 1rem #a5a5a5;
+  transition: transform 200ms ease;
+
+  &--hidden {
+    @include respond(tab-port) {
+      box-shadow: none;
+      transform: translateX(-100%);
+    }
+  }
+
+  @include respond(tab-port) {
+    position: absolute;
+    min-width: 100vw;
+  }
+
+  &__close {
+    display: none;
+    color: #fff;
+    font-size: 45px;
+    margin-left: 5px;
+    padding: 5px 0;
+
+    @include respond(tab-port) {
+      display: block;
+    }
+  }
+}

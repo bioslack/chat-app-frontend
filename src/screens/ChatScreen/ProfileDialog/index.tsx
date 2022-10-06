@@ -7,6 +7,7 @@ import React, {
   useState,
 } from "react";
 import { MdClose, MdEdit, MdCheck } from "react-icons/md";
+import { IMAGE_ROOT_SOURCE } from "../../../api/axios";
 import Button from "../../../components/Button";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import useUser from "../../../hooks/useUser";
@@ -101,7 +102,7 @@ const ProfileDialog = function ({ onClose, visible }: ProfileDialogProps) {
         </span>
         <img
           className="dialog__picture"
-          src={`http://localhost:8888/img/${user?.picture}`}
+          src={`${IMAGE_ROOT_SOURCE}/${user?.picture}`}
         />
         <form>
           <a

@@ -26,6 +26,10 @@
     background-color: #b2f1c4;
     border-radius: 0.5rem;
     padding: 0.6em 1.5rem;
+
+    @include respond(phone) {
+      width: 50vw;
+    }
   }
 
   &__date {

@@ -2,15 +2,7 @@
   display: flex;
   height: 100vh;
   flex-direction: row;
-}
-
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  flex: 2;
-  height: 100vh;
-  z-index: 1000;
-  box-shadow: 0 -15px 10px #a5a5a5;
+  overflow-x: hidden;
 }
 
 .chat-area {
@@ -18,7 +10,6 @@
   flex-direction: column;
   flex: 5;
   background-color: #d3d3d3;
-
 
   &__messages {
     flex: 1;
@@ -32,4 +23,3 @@
     align-items: center;
   }
 }
-

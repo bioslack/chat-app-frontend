@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import { useMemo } from "react";
 import useMessages from "../../hooks/useMessages";
 import useUser from "../../hooks/useUser";
 import Message from "../../models/Message";
@@ -12,8 +13,16 @@ const formatData = (timestamp: number) => {
 };
 
 const ChatText = function ({ message }: ChatTextProps) {
-  const { currentChat } = useMessages();
+  const { currentChat, participants } = useMessages();
   const { user } = useUser();
+  const isGroup = useMemo(() => {
+    if (currentChat) return Object.keys(currentChat).includes("members");
+    return false;
+  }, [currentChat]);
+  const sender = useMemo(() => {
+    const participant = participants.find((p) => p.id === message.sender);
+    return participant?.name;
+  }, [participants, message]);
 
   if (!currentChat) return <div></div>;
 
@@ -23,7 +32,7 @@ const ChatText = function ({ message }: ChatTextProps) {
         user?._id === message.sender ? "chat--received" : "chat--sent"
       }`}
     >
-      <h6>{message.sender}</h6>
+      {isGroup && <h6>{sender}</h6>}
       <p className="chat__text">{message.text}</p>
       <span className="chat__date">
         {formatData(message.createdAt as number)}
