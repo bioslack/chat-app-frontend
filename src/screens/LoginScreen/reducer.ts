@@ -14,7 +14,8 @@ type FormLoginAction =
   | { type: "ENTER_TEXT"; key: LoginFields; value: string }
   | { type: "VALIDATE" }
   | { type: "RESET" }
-  | { type: "DISABLE" };
+  | { type: "DISABLE" }
+  | { type: "ENABLE" };
 
 export interface FormLoginData {
   email: InputData;
@@ -85,6 +86,9 @@ const reducer = function (
     case "DISABLE": {
       return { ...state, disabled: true };
     }
+
+    case "ENABLE":
+      return { ...state, disabled: false };
   }
 };
 

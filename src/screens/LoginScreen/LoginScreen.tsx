@@ -1,5 +1,5 @@
-import React, { FormEvent, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { FormEvent, useCallback, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 import Heading from "../../components/Heading";
 import TextInput from "../../components/TextInput";
@@ -16,13 +16,13 @@ const formInitialState: FormLoginData = {
     message: "",
     messageType: "okay",
     showMessage: false,
-    value: "pereira.luishm@gmail.com",
+    value: "",
   },
   password: {
     message: "",
     messageType: "okay",
     showMessage: false,
-    value: "12345678",
+    value: "",
   },
   disabled: false,
 };
@@ -31,6 +31,11 @@ const LoginScreen = function () {
   const [state, dispatch] = React.useReducer(reducer, formInitialState);
   const { login, isLoading } = useAuth();
   const [loginMessage, setLoginMessage] = React.useState("");
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  // @ts-ignore
+  const from = location.state?.from?.pathname || "/";
 
   const handleSubmit = useCallback(
     function (event: FormEvent) {
@@ -42,13 +47,18 @@ const LoginScreen = function () {
       if (error) return;
 
       dispatch({ type: "DISABLE" });
-      login(prepare(state)).catch((err) => {
-        setLoginMessage("E-mail / senha inválidos");
-        dispatch({ type: "RESET" });
-      });
+      login(prepare(state))
+        .then(() => navigate(from, { replace: true }))
+        .catch(() => {
+          setLoginMessage("E-mail / senha inválidos");
+          dispatch({ type: "RESET" });
+        })
+        .finally(() => dispatch({ type: "ENABLE" }));
     },
-    [state]
+    [state, from, login, navigate]
   );
+
+  useEffect(() => {});
 
   if (isLoading) {
     return <Loading />;

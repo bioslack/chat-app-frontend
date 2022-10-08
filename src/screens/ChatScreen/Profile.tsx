@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 import { IMAGE_ROOT_SOURCE } from "../../api/axios";
 import useAuth from "../../hooks/useAuth";
 import User from "../../models/User";
@@ -15,6 +16,7 @@ const Profile = ({ user }: ProfileProps) => {
   const [showMenu, setShowMenu] = useState(false);
   const [showProfileDialog, setShowProfileDialog] = useState(false);
   const [showGroupDialog, setShowGroupDialog] = useState(false);
+  const navigate = useNavigate();
 
   const onChange = function () {
     setShowMenu((prev) => !prev);
@@ -23,6 +25,13 @@ const Profile = ({ user }: ProfileProps) => {
   const onBlur = function () {
     setTimeout(() => setShowMenu(false), 200);
   };
+
+  const handleLogout = function () {
+    logout().finally(() => {
+      navigate("/login");
+    });
+  };
+
   return (
     <div className="profile">
       <div className="profile__picture">
@@ -50,7 +59,7 @@ const Profile = ({ user }: ProfileProps) => {
           >
             Configurações
           </li>
-          <li onClick={logout} className="floating-menu__item">
+          <li onClick={handleLogout} className="floating-menu__item">
             Logout
           </li>
         </ul>

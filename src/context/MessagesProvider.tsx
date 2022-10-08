@@ -42,7 +42,7 @@ const MessagesProvider = function (props: MessagesProviderProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentChat, setCurrentChat] = useState<Chat | undefined>();
   const [participants, setChatParticipants] = useState<ChatParticipant[]>([]);
-  const { decoded, accessToken } = useAuth();
+  const { accessToken } = useAuth();
   const { user } = useUser();
   const { socket } = useSocket();
   const axios = useAxiosPrivate();
@@ -50,20 +50,20 @@ const MessagesProvider = function (props: MessagesProviderProps) {
   const sendMessage = useCallback(
     (text: string) => {
       if (!currentChat) return;
-      if (!decoded) return;
+      if (!user) return;
 
       const message: Message = {
         _id: uuid(),
         text,
         createdAt: Date.now(),
         receiver: currentChat._id,
-        sender: decoded._id,
+        sender: user._id,
       };
 
       setMessages((prev) => [...prev, message]);
       socket.emit("send-message", message);
     },
-    [decoded, currentChat, socket]
+    [user, currentChat, socket]
   );
 
   useEffect(() => {
@@ -114,7 +114,7 @@ const MessagesProvider = function (props: MessagesProviderProps) {
 
   useEffect(() => {
     setCurrentChat(undefined);
-  }, [decoded]);
+  }, [user]);
 
   useEffect(() => {
     if (!currentChat) return;

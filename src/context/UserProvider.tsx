@@ -55,7 +55,6 @@ const UserProvider = function (props: UsersProviderProps) {
 
         return res.data.users as User[];
       } catch (err) {
-        console.log(err);
         return [];
       }
     },
@@ -63,7 +62,7 @@ const UserProvider = function (props: UsersProviderProps) {
   );
 
   useEffect(() => {
-    if (accessToken) refresh();
+    refresh();
   }, [accessToken, refresh]);
 
   return (

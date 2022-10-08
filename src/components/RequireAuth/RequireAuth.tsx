@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useLocation, Navigate, Outlet } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 
@@ -8,7 +9,7 @@ const RequireAuth = function () {
   return accessToken ? (
     <Outlet />
   ) : (
-    <Navigate to="login" state={{ from: location }} replace />
+    <Navigate to="/login" state={{ from: location }} replace />
   );
 };
 

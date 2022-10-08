@@ -78,7 +78,6 @@ const Participants = function ({
 
   const handleSearchRequest = useRef(
     debounce(async (query: string) => {
-      console.log("Another request");
       setSearchResults((await axios.get(`users?name=${query}`)).data.users);
     }, 300)
   ).current;

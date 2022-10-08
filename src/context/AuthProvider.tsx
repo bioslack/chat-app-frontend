@@ -3,14 +3,6 @@ import { Buffer } from "buffer";
 import axios, { axiosPrivate } from "../api/axios";
 import { AxiosResponse } from "axios";
 
-type Decoded = {
-  _id: string;
-  name: string;
-  email: string;
-  picture: string;
-  iat: Number;
-};
-
 interface ISignupInput {
   name: string;
   email: string;
@@ -25,9 +17,8 @@ interface ILoginInput {
 
 interface AuthContextData {
   accessToken?: string;
-  decoded?: Decoded;
   setAccessToken: Dispatch<SetStateAction<string | undefined>>;
-  logout: () => void;
+  logout: () => Promise<void>;
   login: (input: ILoginInput) => Promise<AxiosResponse<any, any> | undefined>;
   signup: (input: ISignupInput) => Promise<AxiosResponse<any, any> | undefined>;
   isLoading: boolean;
@@ -39,7 +30,7 @@ interface AuthProviderProps {
 
 export const AuthContext = React.createContext<AuthContextData>({
   setAccessToken: () => {},
-  logout: () => {},
+  logout: async () => {},
   login: () => new Promise(() => undefined),
   signup: () => new Promise(() => undefined),
   isLoading: false,
@@ -48,27 +39,16 @@ export const AuthContext = React.createContext<AuthContextData>({
 const AuthProvider = function ({ children }: AuthProviderProps) {
   const [accessToken, setAccessToken] = React.useState<string>();
   const [isLoading, setIsLoading] = React.useState(false);
-  const decoded = React.useMemo<Decoded | undefined>(() => {
-    if (accessToken && accessToken.split(".").length > 2) {
-      const obj = JSON.parse(
-        Buffer.from(accessToken?.split(".")[1] || "", "base64").toString()
-      );
-
-      return obj;
-    }
-    return undefined;
-  }, [accessToken]);
 
   const logout = async () => {
     try {
       setIsLoading(true);
-      await axiosPrivate.delete("/auth/logout");
       setAccessToken(undefined);
+      const res = await axiosPrivate.delete("/auth/logout");
       setIsLoading(false);
     } catch (e) {
-      setAccessToken(undefined);
       setIsLoading(false);
-      throw new Error(`${e}`);
+      // throw new Error(`${e}`);
     }
   };
 
@@ -76,6 +56,7 @@ const AuthProvider = function ({ children }: AuthProviderProps) {
     try {
       setIsLoading(true);
       const res = await axiosPrivate.post("/auth/signin", input);
+      setAccessToken(res.data.access);
       setIsLoading(false);
       return res;
     } catch (e) {
@@ -86,7 +67,9 @@ const AuthProvider = function ({ children }: AuthProviderProps) {
 
   const signup = async (input: ISignupInput) => {
     try {
+      setIsLoading(true);
       const res = await axios.post("/auth/signup", input);
+      setIsLoading(false);
       return res;
     } catch (e) {
       setIsLoading(false);
@@ -100,7 +83,6 @@ const AuthProvider = function ({ children }: AuthProviderProps) {
         accessToken,
         setAccessToken,
         logout,
-        decoded,
         login,
         isLoading,
         signup,

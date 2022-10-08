@@ -57,9 +57,7 @@ const GroupDialog = function ({ onClose, visible }: GroupDialogProps) {
 
   const toggleEditName = () => {
     setIsEditingName((prev) => {
-      if (prev) {
-        console.log("Done");
-      } else {
+      if (!prev) {
         setTimeout(() => {
           nameInputRef.current?.focus();
           nameInputRef.current?.select();
