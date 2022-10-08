@@ -4,7 +4,6 @@ import Sidebar from "./Sidebar";
 import MessageTextInput from "../../components/MessageTextInput";
 import useMessages from "../../hooks/useMessages";
 import ChatText from "./ChatText";
-import useChats from "../../hooks/useChats";
 import Chat from "../../models/Chat";
 import ChatHeader from "./ChatHeader";
 

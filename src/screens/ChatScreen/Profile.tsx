@@ -3,6 +3,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { IMAGE_ROOT_SOURCE } from "../../api/axios";
 import useAuth from "../../hooks/useAuth";
+import useUser from "../../hooks/useUser";
 import User from "../../models/User";
 import GroupDialog from "./GroupDialog";
 import ProfileDialog from "./ProfileDialog";
@@ -13,6 +14,7 @@ interface ProfileProps {
 
 const Profile = ({ user }: ProfileProps) => {
   const { logout } = useAuth();
+  const { refresh } = useUser();
   const [showMenu, setShowMenu] = useState(false);
   const [showProfileDialog, setShowProfileDialog] = useState(false);
   const [showGroupDialog, setShowGroupDialog] = useState(false);
@@ -28,7 +30,7 @@ const Profile = ({ user }: ProfileProps) => {
 
   const handleLogout = function () {
     logout().finally(() => {
-      navigate("/login");
+      refresh().then(() => navigate("/login"));
     });
   };
 

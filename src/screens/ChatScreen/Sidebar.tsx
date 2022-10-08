@@ -1,14 +1,10 @@
-import React, { useCallback, useRef, useState } from "react";
-import useAuth from "../../hooks/useAuth";
-import useChats from "../../hooks/useChats";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useSearchChats from "../../hooks/useSearchChats";
 import useSidebar from "../../hooks/useSidebar";
 import useUser from "../../hooks/useUser";
 import Chat from "../../models/Chat";
 import ChatContainer from "./ChatContainer";
-import GroupDialog from "./GroupDialog";
 import Profile from "./Profile";
-import ProfileDialog from "./ProfileDialog";
 import SearchBar from "./SearchBar";
 
 interface SidebarProps {
@@ -38,6 +34,8 @@ const Sidebar = function (props: SidebarProps) {
     },
     [isLoading, hasNextPage]
   );
+
+  useEffect(() => {}, [])
 
   return (
     <div className={`sidebar ${className}`}>

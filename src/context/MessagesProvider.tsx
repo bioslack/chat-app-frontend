@@ -109,10 +109,6 @@ const MessagesProvider = function (props: MessagesProviderProps) {
   }, [socket, currentChat, user]);
 
   useEffect(() => {
-    // axios.get("/chat/mess")
-  }, [axios, accessToken]);
-
-  useEffect(() => {
     setCurrentChat(undefined);
   }, [user]);
 

@@ -42,6 +42,7 @@ const UserProvider = function (props: UsersProviderProps) {
       setUser(requestUser.data.user);
       setGroups(requestGroup.data.groups);
     } catch (err) {
+      setUser(undefined);
       setError(err as Object);
     } finally {
       setLoading(false);

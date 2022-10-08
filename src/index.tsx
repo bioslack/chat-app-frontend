@@ -7,7 +7,6 @@ import { disableReactDevTools } from "@fvilers/disable-react-devtools";
 import AuthProvider from "./context/AuthProvider";
 import MessagesProvider from "./context/MessagesProvider";
 import SocketProvider from "./context/SocketProvider";
-import ChatProvider from "./context/ChatProvider";
 import UserProvider from "./context/UserProvider";
 import SidebarProvider from "./context/SidebarProvider";
 
@@ -25,11 +24,9 @@ root.render(
         <UserProvider>
           <SocketProvider>
             <MessagesProvider>
-              <ChatProvider>
                 <SidebarProvider>
                   <App />
                 </SidebarProvider>
-              </ChatProvider>
             </MessagesProvider>
           </SocketProvider>
         </UserProvider>

@@ -3,8 +3,10 @@ import { AxiosRequestConfig } from "axios";
 import useAxiosPrivate from "./useAxiosPrivate";
 import Chat from "../models/Chat";
 import { debounce } from "lodash";
+import useSocket from "./useSocket";
 
 const useSearchChats = (search: string, page: number) => {
+  const { socket } = useSocket();
   const [error, setError] = useState<Error | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(false);
@@ -54,6 +56,16 @@ const useSearchChats = (search: string, page: number) => {
 
     return () => controller.abort();
   }, [search, page]);
+
+  useEffect(() => {
+    socket.on("receive-message", (message) => {
+      console.log(message);
+    });
+
+    return () => {
+      socket.off("receive-message");
+    };
+  }, [socket]);
 
   return { chats, isLoading, hasNextPage, error };
 };
